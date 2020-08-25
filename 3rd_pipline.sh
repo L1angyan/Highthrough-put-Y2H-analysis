@@ -12,6 +12,6 @@ blastn -db /public/home/zmxiong/zmxiong/xiong/PPI-F1third/1_cell/pretreatment/ze
 ads 4 -outfmt 7
 
 module load BLAST/2.2.26-Linux_x86_64
-python3 findadbd.py noadapter_ccs.txt noadapter_ccs.fasta PPTs.txt
+python3 y2h_3rd.py noadapter_ccs.txt noadapter_ccs.fasta PPTs.txt
 #The sequence of primer, recombination site(ATTL) and their reverse complement sequence in FASTA format are necessary in current directory.
 # AD.fa & AD_revcom.fa，BD.fa & BD_revcom.fa，attL.fa & attL_revcom.fa is correspond the sequence of ad-primer, bd-primer and ATTL site and their reverse complement sequence.
