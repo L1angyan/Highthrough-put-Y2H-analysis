@@ -1,0 +1,63 @@
+import sys
+IN,OUT = sys.argv[1:]
+ip = open(IN)
+op = open(OUT,'a')
+dic = {}
+
+while 1:
+    line = ip.readline().strip()
+    if line == '' : break
+    if 'T3rdNGSRead' in line : continue
+    linelist = line.split('\t')
+    linelist[3:] = [float(i) for i in linelist[3:]]
+    genea = linelist[1][:linelist[1].index('_')]
+    geneb = linelist[2][:linelist[2].index('_')]
+    ADinframe=0
+    BDinframe=0
+    if linelist[3]==1:
+        adnum=(linelist[13]-linelist[6]-1-1)%3
+        g1num=(min(linelist[15],linelist[16])-1)%3
+        if (adnum==0 and g1num==0) or (adnum+g1num==3):ADinframe=1
+        dbnum=(linelist[8]-linelist[18]-1)%3
+        g2num=(min(linelist[19],linelist[20])-1)%3
+        if (dbnum==0 and g2num==0) or (dbnum+g2num==3):BDinframe=1
+    elif linelist[3]==2:
+        adnum=(linelist[17]-linelist[6]-1-1)%3
+        g1num=(min(linelist[19],linelist[20])-1)%3
+        if (adnum==0 and g1num==0) or (adnum+g1num==3):ADinframe=1
+        dbnum=(linelist[8]-linelist[14]-1)%3
+        g2num=(min(linelist[15],linelist[16])-1)%3
+        if (dbnum==0 and g2num==0) or (dbnum+g2num==3):BDinframe=1
+    elif linelist[3]==3:
+        adnum=(linelist[13]-linelist[9]-1-1)%3
+        g1num=(min(linelist[15],linelist[16])-1)%3
+        if (adnum==0 and g1num==0) or (adnum+g1num==3):BDinframe=1
+        dbnum=(linelist[5]-linelist[18]-1)%3
+        g2num=(min(linelist[19],linelist[20])-1)%3
+        if (dbnum==0 and g2num==0) or (dbnum+g2num==3):ADinframe=1
+    elif linelist[3]==4:
+        adnum=(linelist[13]-linelist[9]-1-1)%3
+        g1num=(min(linelist[19],linelist[20])-1)%3
+        if (adnum==0 and g1num==0) or (adnum+g1num==3):BDinframe=1
+        dbnum=(linelist[5]-linelist[9]-1-1)%3
+        g2num=(min(linelist[15],linelist[16])-1)%3
+        if (dbnum==0 and g2num==0) or (dbnum+g2num==3):ADinframe=1
+
+    if (ADinframe==1 and BDinframe==1):	
+        if linelist[3]==1:
+            if linelist[15]<linelist[16] and linelist[19]>linelist[20]:
+                dic[geneb+"\t"+genea]=linelist[2]+"\t"+str(linelist[20])+"\t"+str(linelist[19])+"\t"+linelist[1]+"\t"+str(linelist[15])+"\t"+str(linelist[16])+"\n"
+        elif linelist[3]==2:
+            if linelist[15]>linelist[16] and linelist[19]<linelist[20]:
+                dic[genea+"\t"+geneb]=linelist[1]+"\t"+str(linelist[16])+"\t"+str(linelist[15])+"\t"+linelist[2]+"\t"+str(linelist[19])+"\t"+str(linelist[20])+"\n"
+        elif linelist[3]==3:
+            if linelist[15]<linelist[16] and linelist[19]>linelist[20]:
+                dic[genea+"\t"+geneb]=linelist[1]+"\t"+str(linelist[15])+"\t"+str(linelist[16])+"\t"+linelist[2]+"\t"+str(linelist[20])+"\t"+str(linelist[19])+"\n"
+        else:
+            if linelist[16]<linelist[15] and linelist[19]<linelist[20]:
+                dic[geneb+"\t"+genea]=linelist[2]+"\t"+str(linelist[19])+"\t"+str(linelist[20])+"\t"+linelist[1]+"\t"+str(linelist[16])+"\t"+str(linelist[15])+"\n"
+
+ip.close()
+for i,j in dic.items():
+    op.write(i+'\t'+j)
+op.close()
